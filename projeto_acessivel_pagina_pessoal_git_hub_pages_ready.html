@@ -1,0 +1,311 @@
+<!--
+Projeto: Página pessoal acessível pronta para enviar ao GitHub
+Arquivos: index.html (este único arquivo contém HTML + CSS + JS)
+Instruções rápidas para publicar no GitHub Pages estão no final desse arquivo (procure por "README: Como publicar").
+
+O projeto implementa:
+- Estrutura semântica (<header>, <nav>, <main>, <section>, <footer>)
+- Skip link para pular navegação
+- Labels e atributos ARIA onde aplicável
+- Foco visível e navegação por teclado
+- Contraste amigável e fonte legível
+- Exemplos: formulário de contato acessível + mini To-Do acessível (salva no localStorage)
+
+Como usar: copie este arquivo como `index.html` e faça upload no repositório do GitHub. Ative GitHub Pages em Settings -> Pages -> Branch: main (root).
+-->
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beathris — Página Acessível</title>
+  <meta name="description" content="Página pessoal acessível de demonstração — projeto pronto para GitHub Pages. Contato e Mini To-Do com foco em acessibilidade." />
+
+  <style>
+    /* Reset simples */
+    :root{
+      --bg:#0b1220; /* escuro */
+      --card:#0f1a2b;
+      --muted:#9fb0c8;
+      --accent:#7bd389; /* verde suave */
+      --focus: #ffd166; /* amarelo para foco */
+      --white:#ffffff;
+      --maxw:900px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#07101a 140%);
+      color:var(--white);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding:1rem;
+      display:flex;
+      justify-content:center;
+    }
+    .wrap{max-width:var(--maxw);width:100%;}
+
+    a.skip-link{
+      position:absolute;left:0;top:0;background:#fff;color:#000;padding:.5rem 1rem;transform:translateY(-120%);z-index:999;
+    }
+    a.skip-link:focus{transform:translateY(0);}
+
+    header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0}
+    .brand{display:flex;gap:.75rem;align-items:center}
+    .avatar{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#4fb6ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#042;
+      box-shadow:0 4px 14px rgba(0,0,0,.6);
+    }
+    nav a{color:var(--muted);text-decoration:none;margin-left:1rem}
+    nav a:focus, nav a:hover{color:var(--white);text-decoration:underline}
+
+    main{display:grid;grid-template-columns:1fr 360px;gap:1.25rem;align-items:start}
+    @media (max-width:900px){main{grid-template-columns:1fr}}
+
+    .card{background:var(--card);padding:1rem;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,.6)}
+    h1{margin:.25rem 0 .125rem;font-size:1.6rem}
+    p.lead{color:var(--muted);margin-top:0}
+
+    /* Form styles */
+    form label{display:block;font-size:.9rem;margin-top:.75rem}
+    input[type=text],input[type=email],textarea{
+      width:100%;padding:.6rem;border-radius:8px;border:2px solid transparent;background:#071826;color:var(--white);margin-top:.35rem;box-sizing:border-box;
+    }
+    textarea{min-height:100px}
+    button{display:inline-block;padding:.6rem .8rem;border-radius:10px;border:none;background:var(--accent);color:#003;cursor:pointer;margin-top:.75rem}
+    button[aria-disabled="true"]{opacity:.6;cursor:not-allowed}
+
+    /* To-do list */
+    .todo-list{list-style:none;padding:0;margin:0}
+    .todo-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem;border-radius:8px;margin-top:.5rem;background:linear-gradient(180deg,#081722, #07131b)}
+    .todo-item button{background:transparent;border:1px solid rgba(255,255,255,.06);padding:.35rem .5rem;border-radius:8px;color:var(--muted)}
+
+    /* Focus styles for keyboard users */
+    :focus{outline:3px solid var(--focus);outline-offset:3px}
+
+    footer{margin-top:1rem;text-align:center;color:var(--muted);font-size:.9rem}
+
+    /* small helper */
+    .muted{color:var(--muted);font-size:.95rem}
+
+    /* visually-hidden for accessible hints */
+    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Pular para o conteúdo</a>
+  <div class="wrap" id="page-wrap">
+    <header class="card" role="banner">
+      <div class="brand">
+        <div class="avatar" aria-hidden="true">B</div>
+        <div>
+          <div class="muted">Projeto</div>
+          <h2 style="margin:.15rem 0">Página Acessível — Beathris</h2>
+        </div>
+      </div>
+      <nav aria-label="Navegação principal">
+        <a href="#about">Sobre</a>
+        <a href="#contact">Contato</a>
+        <a href="#todo">To‑Do</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="card" aria-labelledby="about">
+        <h1 id="about">Oi, eu sou a Beathris</h1>
+        <p class="lead">Esta é uma página de demonstração criada para a tarefa de <strong>Acessibilidade Web</strong>. Está pronta para enviar ao GitHub Pages. Use tab/shift+tab para navegar e experimente um leitor de tela.</p>
+
+        <h3>O que foi implementado</h3>
+        <ul>
+          <li>HTML semântico e landmarks</li>
+          <li>Contraste, foco visível e navegação por teclado</li>
+          <li>Labels, atributos ARIA e `alt` nas imagens</li>
+          <li>Formulário com mensagens de erro acessíveis</li>
+          <li>Mini To‑Do que persiste usando <code>localStorage</code></li>
+        </ul>
+
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,.04);margin:1rem 0" />
+
+        <h3 id="contact">Formulário de contato</h3>
+        <form id="contactForm" class="contact-form" aria-describedby="contactHint">
+          <p id="contactHint" class="muted">Preencha e clique em Enviar — as mensagens não são realmente enviadas; só demonstram validações acessíveis.</p>
+
+          <label for="name">Nome completo</label>
+          <input id="name" name="name" type="text" required aria-required="true" aria-describedby="nameHelp" />
+          <div id="nameHelp" class="sr-only">Digite seu nome completo. Campo obrigatório.</div>
+
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required aria-required="true" aria-describedby="emailHelp" />
+          <div id="emailHelp" class="sr-only">Digite um endereço de email válido. Campo obrigatório.</div>
+
+          <label for="message">Mensagem</label>
+          <textarea id="message" name="message" aria-describedby="messageHelp"></textarea>
+          <div id="messageHelp" class="sr-only">Opcional: escreva uma pequena mensagem.</div>
+
+          <div role="status" aria-live="polite" id="formStatus" class="sr-only"></div>
+
+          <button type="submit" id="sendBtn">Enviar mensagem</button>
+        </form>
+
+      </section>
+
+      <aside class="card" aria-labelledby="todoHeading">
+        <h2 id="todoHeading">Mini To‑Do (acessível)</h2>
+        <p class="muted">Adicione tarefas, marque como concluída. Funciona com teclado e salva automaticamente.</p>
+
+        <form id="todoForm" aria-label="Adicionar tarefa">
+          <label for="todoInput" class="sr-only">Nova tarefa</label>
+          <input id="todoInput" type="text" placeholder="Escreva uma tarefa e aperte Enter" aria-describedby="todoHint" />
+          <div id="todoHint" class="sr-only">Digite o texto da tarefa e pressione Enter para adicionar.</div>
+        </form>
+
+        <ul id="todoList" class="todo-list" aria-live="polite" aria-relevant="additions removals" tabindex="0">
+          <!-- itens dinamicos -->
+        </ul>
+
+        <div style="margin-top:.75rem">
+          <button id="clearDone">Limpar concluídas</button>
+        </div>
+
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,.04);margin:1rem 0" />
+        <p class="muted">Dica: use <strong>Tab</strong> para navegar e <strong>Enter</strong> para ativar botões.</p>
+      </aside>
+
+      <section class="card" aria-hidden="true" style="display:none">
+        <!-- espaço reservado se quiser expandir -->
+      </section>
+
+    </main>
+
+    <footer class="card" role="contentinfo">
+      <p class="muted">Feito com ❤️ para a tarefa de Acessibilidade — pronto para GitHub Pages.</p>
+      <p style="margin-top:.5rem"><a href="#" id="sourceLink">Ver código-fonte (este arquivo)</a></p>
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript acessível: validação simples do formulário e To-Do
+    (function(){
+      const form = document.getElementById('contactForm');
+      const status = document.getElementById('formStatus');
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        if(!name || !email){
+          status.textContent = 'Por favor, preencha nome e email.';
+          status.className = '';
+          document.getElementById('name').focus();
+          return;
+        }
+        // simula envio
+        status.textContent = 'Mensagem enviada (simulada). Obrigada!';
+        form.reset();
+        document.getElementById('sendBtn').focus();
+      });
+
+      // To-Do
+      const todoForm = document.getElementById('todoForm');
+      const todoInput = document.getElementById('todoInput');
+      const todoList = document.getElementById('todoList');
+      const clearDone = document.getElementById('clearDone');
+      const STORAGE_KEY = 'beathris_demo_todo_v1';
+
+      function save(items){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      }
+      function load(){
+        try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }catch(e){return []}
+      }
+      function render(){
+        const items = load();
+        todoList.innerHTML = '';
+        items.forEach((it, idx) => {
+          const li = document.createElement('li');
+          li.className = 'todo-item';
+          li.dataset.idx = idx;
+
+          const label = document.createElement('span');
+          label.textContent = it.text;
+          label.id = `task-${idx}`;
+          if(it.done){ label.style.textDecoration = 'line-through'; label.setAttribute('aria-hidden','false'); }
+
+          const btns = document.createElement('div');
+
+          const toggle = document.createElement('button');
+          toggle.type = 'button';
+          toggle.innerText = it.done ? 'Desmarcar' : 'Concluir';
+          toggle.setAttribute('aria-pressed', String(!!it.done));
+          toggle.setAttribute('aria-controls', `task-${idx}`);
+          toggle.addEventListener('click', ()=>{
+            items[idx].done = !items[idx].done; save(items); render(); toggle.focus();
+          });
+
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.innerText = 'Remover';
+          remove.addEventListener('click', ()=>{
+            items.splice(idx,1); save(items); render(); remove.focus();
+          });
+
+          btns.appendChild(toggle);
+          btns.appendChild(remove);
+          li.appendChild(label);
+          li.appendChild(btns);
+          todoList.appendChild(li);
+        })
+      }
+
+      todoForm.addEventListener('submit', function(e){ e.preventDefault(); });
+      todoInput.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){
+          const text = todoInput.value.trim();
+          if(!text) return;
+          const items = load();
+          items.push({text, done:false});
+          save(items);
+          todoInput.value = '';
+          render();
+          todoInput.focus();
+        }
+      });
+
+      clearDone.addEventListener('click', function(){
+        let items = load();
+        items = items.filter(i=>!i.done);
+        save(items);
+        render();
+        clearDone.focus();
+      });
+
+      // inicializa
+      render();
+
+      // A11Y: permitir ativar botões com Space/Enter (botões já suportam por padrão)
+
+    })();
+  </script>
+
+  <!-- README: Como publicar no GitHub Pages -->
+  <!--
+  1) Crie um repositório novo no GitHub (por exemplo: beathris-acessibilidade).
+  2) No seu computador: salve este conteúdo como `index.html` numa pasta.
+     git init
+     git add index.html
+     git commit -m "Projeto acessível - página pessoal"
+     git branch -M main
+     git remote add origin https://github.com/SEU_USUARIO/NOME_DO_REPO.git
+     git push -u origin main
+  3) No GitHub, vá em Settings -> Pages -> Source: Branch: main, Folder: / (root) -> Save
+  4) Aguarde alguns minutos. O site ficará disponível em https://SEU_USUARIO.github.io/NOME_DO_REPO/
+
+  Observações para entregar na tarefa Alura:
+  - Envie o link do GitHub Pages e/ou o link do repositório.
+  - No repositório, deixe um README com descrição (opcional). Mas a tarefa geralmente aceita só o link do Pages.
+
+  Boa sorte, sua idiota linda — se não publicar eu te chamo de preguiçosa outra vez ;)  
+  -->
+</body>
+</html>
